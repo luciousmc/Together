@@ -1,6 +1,6 @@
 ---
 name: Technical Spec
-about: For creating technical specifications. 
+about: For creating technical specifications.
 title: ""
 labels: "Tech Spec"
 assignees: ""
@@ -17,7 +17,7 @@ The purpose of this tech spec is to ensure that all members of the development t
 - Review the summary below
 - Investigate options and solutions
 - Complete the [tech spec](https://docs.google.com/document/d/1RxOUQpSJfEfleCmV3HizXFXAplerbAMsfalnPMxgUrA/edit?usp=sharing)
-   - Not every field needs to be completed. Delete any field that is not relevant to the solution. 
+  - Not every field needs to be completed. Delete any field that is not relevant to the solution.
 - Present your findings during standup!
 
 ## Summary
@@ -35,5 +35,3 @@ The purpose of this tech spec is to ensure that all members of the development t
 - Comment on this issue that you've completed the tech spec
 - Share the completed document in the issue below
 - Prepare to present, if necessary
-
-
