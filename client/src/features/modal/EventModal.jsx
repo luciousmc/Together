@@ -36,12 +36,12 @@ function EventModal() {
           <AiOutlineClose />
         </button>
       </header>
-      <section className="flex items-center gap-4 p-4">
+      <section className="flex items-center gap-4 py-4 px-7">
         <div className="bg-[#E1E1E1] w-[15%] p-2 text-center rounded-md font-semibold">
           <h2 className="text-[#FF8435]">{month}</h2>
           <span>{date}</span>
         </div>
-        <div>
+        <div className="flex-grow">
           <h2 className="font-semibold">{day}</h2>
           <span className="font-semibold">{timeRange}</span>
           <div className="flex items-center gap-1 text-sm">
@@ -50,23 +50,21 @@ function EventModal() {
           </div>
         </div>
         <div>
-          <button className="flex flex-col items-end justify-end border-2 border-[#FF8435] p-3 rounded-md text-2xl text-[#FF8435]">
+          <button className="border-2 border-[#FF8435] p-3 rounded-md text-2xl text-[#FF8435]">
             <FaRegCalendarCheck />
           </button>
         </div>
       </section>
-      <div className="p-4">
-        <h1 className="font-semibold mb-3 text-xl">Description</h1>
+      <div className="p-4 flex flex-col items-center">
+        <h2 className="font-semibold mb-3 text-xl self-start">Description</h2>
         <p className="mt-3 border-2 p-1.5 rounded-md">
           Daily Banki streams hosted on Discord to practice interview questions.
           You do not need to be confident in your responses to participate - all
           are weclome!
         </p>
-        <div className="flex flex-col items-center justify-center font-semibold">
-          <button>
-            <FcExpand />
-          </button>
-        </div>
+        <button>
+          <FcExpand />
+        </button>
       </div>
       <div className="p-4">
         <h1 className="font-semibold text-xl">Location</h1>
