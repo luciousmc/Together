@@ -75,6 +75,14 @@ function EventModal() {
           <span>{location}</span>
         </div>
       </div>
+      <div className="flex flex-col items-center justify-center font-semibold p-6">
+        <p>
+          Click <span className="text-[#FF8435]">Login</span> to join the event
+        </p>
+        <button className="p-2.5 bg-[#E1E1E1] border-2 rounded-3xl m-0 text-[#FF8435] text-xl drop-shadow-[rgdb(0,0,0,0.25)]">
+          Login with Discord
+        </button>
+      </div>
     </div>
   );
 }
