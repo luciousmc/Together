@@ -29,8 +29,11 @@ function EventModal() {
     <div className="bg-white font-inconsolata rounded-md">
       <header className="flex items-center justify-between p-3 border-b-4">
         <h1>{title}</h1>
-        <button className="border-2 p-1 border-black rounded-md">
-          <AiOutlineClose onClick={handleClose} />
+        <button
+          onClick={handleClose}
+          className="border-2 p-1 border-black rounded-md"
+        >
+          <AiOutlineClose />
         </button>
       </header>
       <section className="flex items-center gap-4 p-4">
