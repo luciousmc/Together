@@ -29,7 +29,7 @@ module.exports = {
   getAll: async (req, res) => {
     // Get an array of ALL events
     const events = await Event.find()
-      .populate("user", "displayName")
+      .populate("user", ["displayName", "avatar", "discordId"])
       .lean()
       .exec();
 
