@@ -27,6 +27,13 @@ class DataService {
     return URL.get("/auth/logout");
   }
 
+  addRSVP(eventId, userId) {
+    return URL.post(`/events/${eventId}/${userId}`);
+  }
+  removeRSVP(eventId, userId) {
+    return URL.put(`/events/${eventId}/${userId}`);
+  }
+
   deleteNeedsToBeWelcome() {
     return URL.delete("/needsToBeWelcome");
   }
