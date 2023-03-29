@@ -10,9 +10,22 @@ import { IoLocationSharp } from "react-icons/io5";
 import { RxAvatar } from "react-icons/rx";
 
 function EventModal() {
-  const { isAuthenticated } = useAuthContext();
   const {
-    activeEvent: { title, description, startAt, endAt, location, user: author },
+    isAuthenticated,
+    user: { _id: userId },
+  } = useAuthContext();
+
+  const {
+    activeEvent: {
+      _id,
+      title,
+      description,
+      startAt,
+      endAt,
+      groupId,
+      location,
+      user: author,
+    },
     handleClose,
   } = useModalContext();
 
@@ -24,6 +37,10 @@ function EventModal() {
     ${formatToLocalTime(endAt)}
    `;
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  const handleJoinclick = () => {
+    console.log(_id, userId);
+  };
 
   return (
     <div className="bg-white font-inconsolata rounded-md">
@@ -97,7 +114,10 @@ function EventModal() {
         )}
       </div>
       <div className="flex flex-col items-center justify-center font-semibold p-6">
-        <button className="p-2.5 bg-[#FF8435] border-2 rounded-3xl m-0 text-xl w-40 border-b-4">
+        <button
+          onClick={handleJoinclick}
+          className="p-2.5 bg-[#FF8435] border-2 rounded-3xl m-0 text-xl w-40 border-b-4"
+        >
           Join
         </button>
         <div className="mt-5 p-4 border-t-4">
