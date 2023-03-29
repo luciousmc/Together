@@ -24,7 +24,7 @@ function EventModal() {
     ${formatToLocalTime(startAt)} -
     ${formatToLocalTime(endAt)}
    `;
-  const timeZone = "America/Chicago";
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   return (
     <div className="bg-white font-inconsolata rounded-md">
