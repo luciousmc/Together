@@ -100,7 +100,29 @@ function EventModal() {
           </div>
         )}
       </div>
-
+      <div className="flex flex-col items-center justify-center font-semibold p-6">
+        <button className="p-2.5 bg-[#FF8435] border-2 rounded-3xl m-0 text-xl w-40 border-b-4">
+          Join
+        </button>
+        <div className="mt-5 p-4 border-t-4">
+          <div className="mt-3">
+            <button className="p-2.5 text-[#989898] border-[#989898] border-2 border-r-0 rounded-3xl m-0 text-xl rounded-r-none">
+              Join this event
+            </button>
+            <button className="p-2.5 text-[#989898] border-[#989898] border-2 border-l-1 rounded-3xl m-0 text-xl rounded-l-none">
+              Join all events
+            </button>
+          </div>
+          <div className="mt-3">
+            <button className="p-2.5 text-[#FF8435] border-[#FF8435] border-2 border-r-0 rounded-3xl m-0 text-xl rounded-r-none">
+              Join this event
+            </button>
+            <button className="p-2.5 bg-orange-500/20 text-[#FF8435] border-[#FF8435] border-2 border-l-1 rounded-3xl m-0 text-xl rounded-l-none">
+              Join all events
+            </button>
+          </div>
+        </div>
+      </div>
       {!isAuthenticated() && (
         <div className="flex flex-col items-center justify-center font-semibold p-6">
           <p>
