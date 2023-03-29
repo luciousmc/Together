@@ -89,4 +89,43 @@ module.exports = {
 
     res.sendStatus(204);
   },
+
+  addRSVP: async (req, res) => {
+    const { eventId, userId } = req.params;
+
+    const event = await Event.findOne({ _id: eventId });
+
+    // Check if user already joined the event
+    if (event.rsvpList.includes(userId)) {
+      return res.status(400).json({
+        message: "User already joined the event",
+      });
+    }
+
+    event.rsvpList.push(userId);
+    const updatedEvent = await event.save();
+
+    res.status(200).json({
+      message: "user added to the rsvp list",
+      event: updatedEvent,
+    });
+  },
+  removeRSVP: async (req, res) => {
+    const { eventId, userId } = req.params;
+    const event = await Event.findOne({ _id: eventId });
+
+    // Check if user has joined the event
+    if (!event.rsvpList.includes(userId)) {
+      return res.status(400).json({
+        message: "User has not joined the event",
+      });
+    }
+
+    event.rsvpList.splice(event.rsvpList.indexOf(userId), 1);
+    const updatedEvent = await event.save();
+    res.status(200).json({
+      message: "user removed from rsvp list",
+      event: updatedEvent,
+    });
+  },
 };
