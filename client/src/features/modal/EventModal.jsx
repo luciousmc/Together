@@ -1,6 +1,5 @@
 import { format, parseISO } from "date-fns";
 import { formatToLocalTime } from "utilities/calendar";
-import togetherLogo from "../.././assets/images/togetherLogo.svg";
 import { useModalContext } from "contexts/ModalContext";
 import DataService from "../../services/dataService";
 import { useAuthContext } from "contexts/AuthContext";
@@ -9,10 +8,12 @@ import { CiGlobe } from "react-icons/ci";
 import { FaRegCalendarCheck } from "react-icons/fa";
 import { GrLocation } from "react-icons/gr";
 import { FcExpand } from "react-icons/fc";
+import { RxAvatar } from "react-icons/rx";
 
 function EventModal() {
+  const { isAuthenticated } = useAuthContext();
   const {
-    activeEvent: { title, startAt, endAt, location },
+    activeEvent: { title, startAt, endAt, location, user: author },
     handleClose,
   } = useModalContext();
 
@@ -66,21 +67,51 @@ function EventModal() {
           <FcExpand />
         </button>
       </div>
-      <div className="p-4">
-        <h1 className="font-semibold text-xl">Location</h1>
-        <div className="flex items-center gap-1 text-base">
-          <GrLocation className="text-[#3EA6D7] " />
-          <span>{location}</span>
+      <div className="py-4 px-14 flex justify-between">
+        <div className="flex flex-col items-center">
+          <h2 className="font-semibold text-xl">Location</h2>
+          <div className="text-base flex flex-grow items-center justify-center gap-2">
+            <GrLocation className="text-[#3EA6D7]" />
+            <span>{location}</span>
+          </div>
         </div>
+
+        {/* Author only shown if user is logged in */}
+        {isAuthenticated() && (
+          <div>
+            <h1 className="font-semibold text-xl text-center">Author</h1>
+            <div className="flex gap-2 items-center">
+              <div className="w-14">
+                {author.avatar ? (
+                  <img
+                    className="w-full h-full object-contain rounded-full"
+                    src={`https://cdn.discordapp.com/avatars/${author.discordId}/${author.avatar}.webp`}
+                    alt="Avatar"
+                  />
+                ) : (
+                  <RxAvatar className="w-5" />
+                )}
+              </div>
+              <div>
+                <h2>{author.displayName}</h2>
+                <span>100Devs</span>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
-      <div className="flex flex-col items-center justify-center font-semibold p-6">
-        <p>
-          Click <span className="text-[#FF8435]">Login</span> to join the event
-        </p>
-        <button className="p-2.5 bg-[#E1E1E1] border-2 rounded-3xl m-0 text-[#FF8435] text-xl drop-shadow-[rgdb(0,0,0,0.25)]">
-          Login with Discord
-        </button>
-      </div>
+
+      {!isAuthenticated() && (
+        <div className="flex flex-col items-center justify-center font-semibold p-6">
+          <p>
+            Click <span className="text-[#FF8435]">Login</span> to join the
+            event
+          </p>
+          <button className="p-2.5 bg-[#E1E1E1] border-2 rounded-3xl m-0 text-[#FF8435] text-xl drop-shadow-[rgdb(0,0,0,0.25)]">
+            Login with Discord
+          </button>
+        </div>
+      )}
     </div>
   );
 }
