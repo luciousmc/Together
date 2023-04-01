@@ -8,6 +8,7 @@ import { CiGlobe } from "react-icons/ci";
 import { FaRegCalendarCheck } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import { RxAvatar } from "react-icons/rx";
+import { useRef, useState } from "react";
 
 function EventModal() {
   const {
@@ -17,9 +18,10 @@ function EventModal() {
 
   const {
     activeEvent: {
-      _id,
+      _id: eventId,
       title,
       description,
+      rsvpList,
       startAt,
       endAt,
       groupId,
@@ -28,6 +30,10 @@ function EventModal() {
     },
     handleClose,
   } = useModalContext();
+  const [isUserAttending, setIsUserAttending] = useState(
+    rsvpList.includes(userId)
+  );
+  const groupRef = useRef();
 
   const month = format(parseISO(startAt), "MMM");
   const date = format(parseISO(startAt), "d");
@@ -38,17 +44,28 @@ function EventModal() {
    `;
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-  const handleJoinclick = () => {
-    console.log(_id, userId);
+  const handleJoinClick = async () => {
+    if (groupId) {
+      groupRef.current.classList.toggle("hidden");
+    } else {
+      await DataService.addRSVP(eventId, userId);
+      setIsUserAttending(true);
+    }
+  };
+  const handleWithdrawClick = async () => {
+    await DataService.removeRSVP(eventId, userId);
+    setIsUserAttending(false);
   };
 
   return (
     <div className="bg-white font-inconsolata rounded-md">
       <header className="flex items-center justify-between p-3 border-b-4">
         <h1 className="font-extrabold uppercase">{title}</h1>
-        <h2 className="border-2 border-[#3EA6D7] text-[#3EA6D7] bg-cyan-100/20 p-1.5 rounded-md ml-auto">
-          Attending
-        </h2>
+        {isUserAttending && (
+          <h2 className="border-2 border-[#3EA6D7] text-[#3EA6D7] bg-cyan-100/20 p-1.5 rounded-md ml-auto">
+            Attending
+          </h2>
+        )}
         <button
           onClick={handleClose}
           className="border-2 p-2 border-black rounded-md ml-2"
@@ -116,57 +133,83 @@ function EventModal() {
           </div>
         )}
       </div>
-      <div className="flex flex-col items-center justify-center font-semibold p-6">
-        <button
-          onClick={handleJoinclick}
-          className="p-2.5 bg-[#FF8435] border-2 text-white rounded-3xl m-0 text-xl w-40 border-b-4"
-        >
-          Join
-        </button>
-        <div className="mt-5 p-4 border-t-4">
-          <div className="mt-3 flex">
-            <button className="p-2.5 text-[#989898] border-[#989898] border-2 border-r-0 rounded-3xl m-0 text-xl rounded-r-none">
-              Join this event
-            </button>
-            <button className="p-2.5 text-[#989898] border-[#989898] border-2 border-l-1 rounded-3xl m-0 text-xl rounded-l-none">
-              Join all events
-            </button>
+      {isAuthenticated() ? (
+        <>
+          <div className="flex items-center justify-center font-semibold p-6">
+            {isUserAttending ? (
+              <button
+                onClick={handleWithdrawClick}
+                className="p-2.5 border-2 text-white rounded-3xl m-0 text-xl w-40 border-b-4 bg-[#165E7C]/75"
+              >
+                Withdraw
+              </button>
+            ) : (
+              <button
+                onClick={handleJoinClick}
+                className="p-2.5 border-2 text-white rounded-3xl m-0 text-xl w-40 border-b-4 bg-[#FF8435]"
+              >
+                Join
+              </button>
+            )}
           </div>
-          <div className="mt-3">
-            <button className="p-2.5 text-[#FF8435] border-[#FF8435] border-2 border-r-0 rounded-3xl m-0 text-xl rounded-r-none">
-              Join this event
+
+          {/* If event is recurring it should have groupId. */}
+          {/* Only render bottom of modal if event is recurring */}
+          {groupId && (
+            <section ref={groupRef} className="hidden">
+              <hr className="border-2 my-3" />
+              <span>This event is recurring</span>
+              <div className="p-4">
+                <div className="mt-3 flex">
+                  <button
+                    className={`py-2.5 px-4 border-2 border-r-0 rounded-3xl m-0 text-xl rounded-r-none ${
+                      isUserAttending
+                        ? "text-[#FF8435] border-[#FF8435] bg-orange-500/20t"
+                        : "text-[#989898] border-[#989898]"
+                    }`}
+                  >
+                    Join this day
+                  </button>
+                  <button className="py-2.5 px-4 text-[#989898] border-[#989898] border-2 border-l-1 rounded-3xl m-0 text-xl rounded-l-none">
+                    Join all days
+                  </button>
+                </div>
+                <div className="mt-3">
+                  <button className="p-2.5 text-[#FF8435] border-[#FF8435] border-2 border-r-0 rounded-3xl m-0 text-xl rounded-r-none">
+                    Join this day
+                  </button>
+                  <button className="p-2.5 bg-orange-500/20 text-[#FF8435] border-[#FF8435] border-2 border-l-1 rounded-3xl m-0 text-xl rounded-l-none">
+                    Join all days
+                  </button>
+                </div>
+              </div>
+            </section>
+          )}
+          {/* <div className="flex flex-col items-center justify-center font-semibold ">
+            <button className="p-2.5 bg-[#165E7C]/75 text-white border-2 rounded-3xl m-0 text-xl w-40 border-b-4">
+              Withdraw
             </button>
-            <button className="p-2.5 bg-orange-500/20 text-[#FF8435] border-[#FF8435] border-2 border-l-1 rounded-3xl m-0 text-xl rounded-l-none">
-              Join all events
-            </button>
-          </div>
-        </div>
-      </div>
-      */}
-      <div className="flex flex-col items-center justify-center font-semibold ">
-        <button className="p-2.5 bg-[#165E7C]/75 text-white border-2 rounded-3xl m-0 text-xl w-40 border-b-4">
-          Withdraw
-        </button>
-        <div className="mt-5 p-4 border-t-4">
-          <div className="mt-3 flex">
-            <button className="p-2.5 text-[#989898] border-[#989898] border-2 border-r-0 rounded-3xl m-0 text-xl rounded-r-none">
-              Withdraw this event
-            </button>
-            <button className="p-2.5 text-[#989898] border-[#989898] border-2 border-l-1 rounded-3xl m-0 text-xl rounded-l-none">
-              Withdraw all events
-            </button>
-          </div>
-          <div className="mt-3">
-            <button className="p-2.5 text-[#D70000] border-[#D70000] border-2 border-r-0 rounded-3xl m-0 text-xl rounded-r-none">
-              Withdraw this event
-            </button>
-            <button className="p-2.5 bg-[#D70000]/10 text-[#D70000] border-[#D70000] border-2 border-l-1 rounded-3xl m-0 text-xl rounded-l-none">
-              Withdraw all events
-            </button>
-          </div>
-        </div>
-      </div>
-      {!isAuthenticated() && (
+            <div className="mt-5 p-4 border-t-4">
+              <div className="mt-3 flex">
+                <button className="p-2.5 text-[#989898] border-[#989898] border-2 border-r-0 rounded-3xl m-0 text-xl rounded-r-none">
+                  Withdraw this event
+                </button>
+                <button className="p-2.5 text-[#989898] border-[#989898] border-2 border-l-1 rounded-3xl m-0 text-xl rounded-l-none">
+                  Withdraw all events
+                </button>
+              </div>
+              <div className="mt-3">
+                <button className="p-2.5 text-[#D70000] border-[#D70000] border-2 border-r-0 rounded-3xl m-0 text-xl rounded-r-none">
+                  Withdraw this event
+                </button>
+                <button className="p-2.5 bg-[#D70000]/10 text-[#D70000] border-[#D70000] border-2 border-l-1 rounded-3xl m-0 text-xl rounded-l-none">
+                  Withdraw all events
+                </button>
+              </div>
+            </div>
+          </div> */}
+        </>
+      ) : (
         <div className="flex flex-col items-center justify-center font-semibold p-6">
           <p>
             Click <span className="text-[#FF8435]">Login</span> to join the
