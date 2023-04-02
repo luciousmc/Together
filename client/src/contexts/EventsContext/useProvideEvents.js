@@ -7,10 +7,15 @@ const useProvideEvents = () => {
     setEvents([...events, ...newEvents]);
   };
 
+  const removeEvent = eventId => {
+    setEvents(prevEvents => prevEvents.filter(event => event._id !== eventId));
+  };
+
   return {
     events,
     setEvents,
     addEvents,
+    removeEvent,
   };
 };
 
