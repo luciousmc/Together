@@ -9,6 +9,7 @@ import { FaRegCalendarCheck } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import { RxAvatar } from "react-icons/rx";
 import { useRef, useState } from "react";
+import { useEventsContext } from "contexts/EventsContext";
 
 function EventModal() {
   const {
@@ -30,6 +31,9 @@ function EventModal() {
     },
     handleClose,
   } = useModalContext();
+
+  const { removeEvent } = useEventsContext();
+
   const [isUserAttending, setIsUserAttending] = useState(
     rsvpList.includes(userId)
   );
@@ -55,6 +59,14 @@ function EventModal() {
   const handleWithdrawClick = async () => {
     await DataService.removeRSVP(eventId, userId);
     setIsUserAttending(false);
+  };
+
+  const handleDeleteClick = async () => {
+    await DataService.deleteEvent(eventId);
+    removeEvent(eventId);
+
+    // Temporary for testing
+    handleClose();
   };
 
   return (
@@ -136,7 +148,15 @@ function EventModal() {
       {isAuthenticated() ? (
         <>
           <div className="flex items-center justify-center font-semibold p-6">
-            {isUserAttending ? (
+            {userId === author._id ? (
+              // Delete event stuffs
+              <button
+                onClick={handleDeleteClick}
+                className="p-2.5 border-2 text-white rounded-3xl m-0 text-xl w-40 border-b-4 bg-[#CA4242]"
+              >
+                Delete
+              </button>
+            ) : isUserAttending ? (
               <button
                 onClick={handleWithdrawClick}
                 className="p-2.5 border-2 text-white rounded-3xl m-0 text-xl w-40 border-b-4 bg-[#165E7C]/75"
