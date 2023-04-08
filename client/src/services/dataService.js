@@ -28,10 +28,10 @@ class DataService {
   }
 
   addRSVP(eventId, userId) {
-    return URL.put(`/events/${eventId}/${userId}`);
+    return URL.put(`/events/${eventId}/rsvp-add/${userId}`);
   }
   removeRSVP(eventId, userId) {
-    return URL.delete(`/events/${eventId}/${userId}`);
+    return URL.put(`/events/${eventId}/rsvp-remove/${userId}`);
   }
 
   deleteNeedsToBeWelcome() {

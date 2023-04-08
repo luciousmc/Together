@@ -16,11 +16,16 @@ router.post(
 );
 
 // RSVP routes
-router
-  .route("/:eventId/:userId")
-  .put(validateObjectId, eventsController.addRSVP)
-  .delete(validateObjectId, eventsController.removeRSVP);
-
+router.put(
+  "/:eventId/rsvp-add/:userId",
+  validateObjectId,
+  eventsController.addRSVP
+);
+router.put(
+  "/:eventId/rsvp-remove/:userId",
+  validateObjectId,
+  eventsController.removeRSVP
+);
 router.get("/", eventsController.getAll);
 
 router.get("/:id", validateObjectId, eventsController.getOne);
